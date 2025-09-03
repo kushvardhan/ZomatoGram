@@ -3,6 +3,7 @@ const app = express();
 const cookieParser = require('cookie-parser');
 
 const authRouter = require("./routes/auth.routes");
+const foodRouter = require("./routes/food.routes");
 
 app.use(express.json());
 app.use(cookieParser());
@@ -12,5 +13,6 @@ app.get('/',(req,res)=>{
 })
 
 app.use('/api/auth', authRouter);
+app.use("/api/food", foodRouter);
 
 module.exports=app;
