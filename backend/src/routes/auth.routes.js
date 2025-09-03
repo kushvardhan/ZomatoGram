@@ -1,28 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const {registerUser,loginUser,logout} = require("../controllers/auth.controller");
 
-router.post('/user/sign-up',async(req,res)=>{
-    try{
+router.post('/user/sign-up', registerUser );
 
-    }catch(err){
-        console.log("Signup-ERROR: ",err);
-    }
-});
+router.post('/user/sign-in', loginUser);
 
-router.post('/user/sign-in', async(req,res)=>{
-    try{
-
-    }catch(err){
-        console.log("SignIn-ERROR: ",err);
-    }
-});
-
-router.get('/logout', async(req,res)=>{
-    try{
-
-    }catch(err){
-        console.log("Signup-ERROR: ",err);
-    }
-});
+router.get('/logout', logout);
 
 module.exports=router;
