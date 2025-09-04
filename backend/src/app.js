@@ -6,6 +6,7 @@ const authRouter = require("./routes/auth.routes");
 const foodRouter = require("./routes/food.routes");
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.get('/',(req,res)=>{
