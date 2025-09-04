@@ -1,0 +1,5 @@
+/user/sign-up => user register form
+/user/sign-in => user login form
+
+/food-partner/sign-up => food-partner register form
+/food-partner/sign-in => food-partner login form
