@@ -1,7 +1,7 @@
 const user = require("../models/user.model");
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
-const foodPartner = require("../models/foodpartner.model");
+const foodpartner = require("../models/foodpartner.model");
 
 
 async function registerUser(req,res){
@@ -108,14 +108,14 @@ async function registerFoodPartner(req,res){
             return res.status(400).json({ message: "All fields are required." });
         }
 
-        const userAlreadyExists = await foodPartner.findOne({ email });
+        const userAlreadyExists = await foodpartner.findOne({ email });
         if (userAlreadyExists) {
             return res.status(400).json({ message: "User already exists." });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = await foodPartner.create({
+        const newUser = await foodpartner.create({
             fullName,
             email,
             password: hashedPassword,
@@ -126,10 +126,10 @@ async function registerFoodPartner(req,res){
         }
 
         const token = jwt.sign(
-            { id: newUser._id },
-            process.env.JWT_SECRET,
-            { expiresIn: "7d" } 
-        );
+  { id: newUser._id }, 
+  process.env.JWT_SECRET,
+  { expiresIn: "7d" }
+);
 
         res.cookie("token", token);
 
@@ -149,7 +149,7 @@ async function registerFoodPartner(req,res){
 async function loginFoodPartner(req,res){
     try{
         const {email,password} = req.body;
-        const userExists = await foodPartner.findOne({email});
+        const userExists = await foodpartner.findOne({email});
         if(!userExists){
             return res.status(400).json({
                 message:"Invalid Email or Password. "
@@ -165,15 +165,16 @@ async function loginFoodPartner(req,res){
         }
 
         const token = jwt.sign(
-            { id: userExists._id },
-            process.env.JWT_SECRET,
-            { expiresIn: "7d" } 
-        );
+  { id: userExists._id },   // 👈 must be _id
+  process.env.JWT_SECRET,
+  { expiresIn: "7d" }
+);
 
         res.cookie("token", token);
 
         res.status(200).json({
-            message:"food-partner user Logged In"
+            message:"food-partner user Logged In",
+            userExists
         })
 
     }catch(err){
