@@ -1,0 +1,239 @@
+/* Design System Variables - ZomatoGram */
+@import "tailwindcss/theme" layer(theme);
+
+@layer theme {
+  :root {
+    /* Color Palette - Light Mode */
+    --color-primary-50: 255 247 237;
+    --color-primary-100: 255 237 213;
+    --color-primary-200: 254 215 170;
+    --color-primary-300: 253 186 116;
+    --color-primary-400: 251 146 60;
+    --color-primary-500: 249 115 22;
+    --color-primary-600: 234 88 12;
+    --color-primary-700: 194 65 12;
+    --color-primary-800: 154 52 18;
+    --color-primary-900: 124 45 18;
+    --color-primary-950: 67 20 7;
+
+    --color-secondary-50: 248 250 252;
+    --color-secondary-100: 241 245 249;
+    --color-secondary-200: 226 232 240;
+    --color-secondary-300: 203 213 225;
+    --color-secondary-400: 148 163 184;
+    --color-secondary-500: 100 116 139;
+    --color-secondary-600: 71 85 105;
+    --color-secondary-700: 51 65 85;
+    --color-secondary-800: 30 41 59;
+    --color-secondary-900: 15 23 42;
+    --color-secondary-950: 2 6 23;
+
+    --color-accent-50: 240 253 244;
+    --color-accent-100: 220 252 231;
+    --color-accent-200: 187 247 208;
+    --color-accent-300: 134 239 172;
+    --color-accent-400: 74 222 128;
+    --color-accent-500: 34 197 94;
+    --color-accent-600: 22 163 74;
+    --color-accent-700: 21 128 61;
+    --color-accent-800: 22 101 52;
+    --color-accent-900: 20 83 45;
+    --color-accent-950: 5 46 22;
+
+    --color-neutral-50: 250 250 250;
+    --color-neutral-100: 245 245 245;
+    --color-neutral-200: 229 229 229;
+    --color-neutral-300: 212 212 212;
+    --color-neutral-400: 163 163 163;
+    --color-neutral-500: 115 115 115;
+    --color-neutral-600: 82 82 82;
+    --color-neutral-700: 64 64 64;
+    --color-neutral-800: 38 38 38;
+    --color-neutral-900: 23 23 23;
+    --color-neutral-950: 10 10 10;
+
+    /* Semantic Colors */
+    --color-success: 34 197 94;
+    --color-warning: 245 158 11;
+    --color-error: 239 68 68;
+    --color-info: 59 130 246;
+
+    /* Background Colors */
+    --bg-primary: 255 255 255;
+    --bg-secondary: 249 250 251;
+    --bg-tertiary: 243 244 246;
+    --bg-overlay: 0 0 0;
+
+    /* Text Colors */
+    --text-primary: 17 24 39;
+    --text-secondary: 75 85 99;
+    --text-tertiary: 156 163 175;
+    --text-inverse: 255 255 255;
+
+    /* Border Colors */
+    --border-primary: 229 231 235;
+    --border-secondary: 209 213 219;
+    --border-focus: 59 130 246;
+
+    /* Spacing Scale */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+    --space-3xl: 4rem;
+
+    /* Typography Scale */
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 1.875rem;
+    --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
+
+    /* Line Heights */
+    --leading-tight: 1.25;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.625;
+
+    /* Border Radius */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-2xl: 1rem;
+    --radius-full: 9999px;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+      0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+      0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+    /* Transitions */
+    --transition-fast: 150ms ease-in-out;
+    --transition-normal: 250ms ease-in-out;
+    --transition-slow: 350ms ease-in-out;
+
+    /* Z-Index Scale */
+    --z-dropdown: 1000;
+    --z-sticky: 1020;
+    --z-fixed: 1030;
+    --z-modal-backdrop: 1040;
+    --z-modal: 1050;
+    --z-popover: 1060;
+    --z-tooltip: 1070;
+    --z-toast: 1080;
+  }
+
+  /* Dark Mode Variables */
+  .dark {
+    --color-primary-50: 67 20 7;
+    --color-primary-100: 124 45 18;
+    --color-primary-200: 154 52 18;
+    --color-primary-300: 194 65 12;
+    --color-primary-400: 234 88 12;
+    --color-primary-500: 249 115 22;
+    --color-primary-600: 251 146 60;
+    --color-primary-700: 253 186 116;
+    --color-primary-800: 254 215 170;
+    --color-primary-900: 255 237 213;
+    --color-primary-950: 255 247 237;
+
+    --color-secondary-50: 2 6 23;
+    --color-secondary-100: 15 23 42;
+    --color-secondary-200: 30 41 59;
+    --color-secondary-300: 51 65 85;
+    --color-secondary-400: 71 85 105;
+    --color-secondary-500: 100 116 139;
+    --color-secondary-600: 148 163 184;
+    --color-secondary-700: 203 213 225;
+    --color-secondary-800: 226 232 240;
+    --color-secondary-900: 241 245 249;
+    --color-secondary-950: 248 250 252;
+
+    --color-neutral-50: 10 10 10;
+    --color-neutral-100: 23 23 23;
+    --color-neutral-200: 38 38 38;
+    --color-neutral-300: 64 64 64;
+    --color-neutral-400: 82 82 82;
+    --color-neutral-500: 115 115 115;
+    --color-neutral-600: 163 163 163;
+    --color-neutral-700: 212 212 212;
+    --color-neutral-800: 229 229 229;
+    --color-neutral-900: 245 245 245;
+    --color-neutral-950: 250 250 250;
+
+    /* Dark Mode Backgrounds */
+    --bg-primary: 17 24 39;
+    --bg-secondary: 31 41 55;
+    --bg-tertiary: 55 65 81;
+    --bg-overlay: 0 0 0;
+
+    /* Dark Mode Text */
+    --text-primary: 243 244 246;
+    --text-secondary: 209 213 219;
+    --text-tertiary: 156 163 175;
+    --text-inverse: 17 24 39;
+
+    /* Dark Mode Borders */
+    --border-primary: 75 85 99;
+    --border-secondary: 107 114 128;
+    --border-focus: 96 165 250;
+  }
+
+  /* System Theme Detection */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light) {
+      --color-primary-50: 67 20 7;
+      --color-primary-100: 124 45 18;
+      --color-primary-200: 154 52 18;
+      --color-primary-300: 194 65 12;
+      --color-primary-400: 234 88 12;
+      --color-primary-500: 249 115 22;
+      --color-primary-600: 251 146 60;
+      --color-primary-700: 253 186 116;
+      --color-primary-800: 254 215 170;
+      --color-primary-900: 255 237 213;
+      --color-primary-950: 255 247 237;
+
+      --bg-primary: 17 24 39;
+      --bg-secondary: 31 41 55;
+      --bg-tertiary: 55 65 81;
+
+      --text-primary: 243 244 246;
+      --text-secondary: 209 213 219;
+      --text-tertiary: 156 163 175;
+      --text-inverse: 17 24 39;
+
+      --border-primary: 75 85 99;
+      --border-secondary: 107 114 128;
+      --border-focus: 96 165 250;
+    }
+  }
+}
+
+/* Smooth Transitions for Theme Changes */
+* {
+  transition: background-color var(--transition-normal),
+    border-color var(--transition-normal), color var(--transition-normal),
+    fill var(--transition-normal), stroke var(--transition-normal),
+    opacity var(--transition-normal), box-shadow var(--transition-normal),
+    transform var(--transition-fast);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
