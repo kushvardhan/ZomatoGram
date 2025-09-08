@@ -1,23 +1,31 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
+import "./Cart.css";
 
 const Cart = () => {
   return (
-    <div className="container py-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-center space-y-4"
-      >
-        <h1 className="heading-1">Shopping Cart</h1>
-        <p className="body-large">Your cart items and checkout</p>
-        <div className="mt-8 p-8 bg-neutral-100 dark:bg-neutral-800 rounded-lg">
-          <p className="text-neutral-600 dark:text-neutral-400">
-            Shopping cart functionality coming soon...
+    <div className="cart-container">
+      <div className="container">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="cart-header"
+        >
+          <h1 className="cart-title">Shopping Cart</h1>
+          <p className="cart-subtitle">Review your items before checkout</p>
+        </motion.div>
+
+        <div className="cart-empty">
+          <div className="cart-empty-icon">🛒</div>
+          <h2 className="cart-empty-title">Your cart is empty</h2>
+          <p className="cart-empty-description">
+            Add some delicious items to your cart to get started
           </p>
+          <a href="/restaurants" className="cart-empty-btn">
+            Browse Restaurants
+          </a>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };
