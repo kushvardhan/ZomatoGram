@@ -2,7 +2,9 @@
 
 .home-container {
   min-height: 100vh;
-  background-color: #fafafa;
+  background-color: #ffffff;
+  margin: 0;
+  padding: 0;
 }
 
 .dark .home-container {
@@ -12,8 +14,9 @@
 /* Hero Section */
 .hero-section {
   position: relative;
-  padding: 5rem 0 8rem 0;
+  padding: 4rem 0 6rem 0;
   overflow: hidden;
+  margin: 0;
 }
 
 .hero-background {
@@ -26,12 +29,7 @@
 }
 
 .dark .hero-background {
-  background: linear-gradient(
-    135deg,
-    var(--neutral-900) 0%,
-    var(--neutral-800) 50%,
-    var(--neutral-900) 100%
-  );
+  background: linear-gradient(135deg, #0a0a0a 0%, #171717 50%, #0a0a0a 100%);
 }
 
 .hero-floating-elements {
@@ -86,7 +84,7 @@
   padding: 0 1rem;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
+  gap: 3rem;
   align-items: center;
 }
 
@@ -250,6 +248,17 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
+.hero-feature-icon:dark {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  box-shadow: 2px 3px 5px 0px rgba(236, 233, 233, 0.219);
+}
+
 .hero-feature-icon-primary {
   background: linear-gradient(to right, var(--primary-400), var(--primary-500));
 }
@@ -263,6 +272,12 @@
 }
 
 .hero-feature-icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: black;
+}
+
+.hero-feature-icon svg:dark{
   width: 1.5rem;
   height: 1.5rem;
   color: white;
