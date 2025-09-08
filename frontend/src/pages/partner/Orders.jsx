@@ -1,30 +1,32 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
+import "../pages.css";
 
 const PartnerOrders = () => {
   return (
-    <div className="space-y-6">
+    <div className="page-container">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
+        className="page-header"
       >
-        <h1 className="heading-2 mb-2">Orders Management</h1>
-        <p className="text-neutral-600 dark:text-neutral-400">
-          Manage incoming orders and track their status.
+        <h1 className="page-title">Orders Management</h1>
+        <p className="page-subtitle">
+          Manage incoming orders and track their status
         </p>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        className="bg-neutral-100 dark:bg-neutral-800 rounded-lg p-8 text-center"
-      >
-        <p className="text-neutral-600 dark:text-neutral-400">
-          Order management system coming soon...
-        </p>
-      </motion.div>
+      <div className="page-content">
+        <div className="page-placeholder">
+          <div className="page-placeholder-icon">📋</div>
+          <div className="page-placeholder-text">
+            Order management system coming soon...
+          </div>
+          <a href="/partner" className="page-cta-button">
+            Back to Dashboard
+          </a>
+        </div>
+      </div>
     </div>
   );
 };
