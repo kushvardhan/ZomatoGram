@@ -8,10 +8,12 @@
   backdrop-filter: blur(12px);
   border-bottom: 1px solid #e5e5e5;
   transition: all 0.3s ease;
+  margin: 0;
+  padding: 0;
 }
 
 .dark .navbar {
-  background: rgba(38, 38, 38, 0.95);
+  background: rgba(10, 10, 10, 0.95);
   border-bottom-color: #262626;
 }
 

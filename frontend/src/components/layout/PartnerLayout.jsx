@@ -18,6 +18,7 @@ import { ZomatoGramLogo } from "../../assets/logos";
 import { useTheme } from "../../hooks/useTheme";
 import { cn } from "../../utils/cn";
 import Button from "../ui/Button";
+import "./PartnerLayout.css";
 
 const PartnerLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
