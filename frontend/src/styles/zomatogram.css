@@ -1640,11 +1640,137 @@ body {
 
 /* Selection Styles */
 ::selection {
-  background-color: var(--primary-200);
-  color: var(--neutral-900);
+  background-color: #fed7aa;
+  color: #171717;
 }
 
 .dark ::selection {
-  background-color: var(--primary-800);
-  color: var(--neutral-100);
+  background-color: #9a3412;
+  color: #fafafa;
+}
+
+/* Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #f26b47;
+  color: white;
+}
+
+.btn:hover {
+  background: #ea580c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+  background: #f26b47;
+  color: white;
+  border-color: #f26b47;
+}
+
+.btn-primary:hover {
+  background: #ea580c;
+  border-color: #ea580c;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #f26b47;
+  border-color: #f26b47;
+}
+
+.btn-secondary:hover {
+  background: #f26b47;
+  color: white;
+}
+
+.btn-outline {
+  background: transparent;
+  color: #171717;
+  border-color: #d4d4d4;
+}
+
+.dark .btn-outline {
+  color: #fafafa;
+  border-color: #525252;
+}
+
+.btn-outline:hover {
+  background: #f5f5f5;
+}
+
+.dark .btn-outline:hover {
+  background: #262626;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #525252;
+  border-color: transparent;
+}
+
+.dark .btn-ghost {
+  color: #a3a3a3;
+}
+
+.btn-ghost:hover {
+  background: #f5f5f5;
+  color: #171717;
+}
+
+.dark .btn-ghost:hover {
+  background: #262626;
+  color: #fafafa;
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
+  border-color: #ef4444;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+/* Button Sizes */
+.btn-sm {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+}
+
+.btn-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+}
+
+.btn-xl {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+}
+
+/* Loading Spinner */
+.spinner {
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

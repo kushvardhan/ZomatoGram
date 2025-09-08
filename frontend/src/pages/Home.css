@@ -2,11 +2,11 @@
 
 .home-container {
   min-height: 100vh;
-  background-color: var(--neutral-50);
+  background-color: #fafafa;
 }
 
 .dark .home-container {
-  background-color: var(--neutral-900);
+  background-color: #0a0a0a;
 }
 
 /* Hero Section */
@@ -110,7 +110,7 @@
 .hero-title {
   font-size: 3rem;
   font-weight: 700;
-  color: var(--neutral-900);
+  color: #171717;
   line-height: 1.1;
   margin-bottom: 1.5rem;
 }
@@ -122,16 +122,11 @@
 }
 
 .dark .hero-title {
-  color: var(--neutral-100);
+  color: #fafafa;
 }
 
 .hero-title-gradient {
-  background: linear-gradient(
-    to right,
-    var(--primary-500),
-    var(--accent-500),
-    var(--primary-600)
-  );
+  background: linear-gradient(to right, #f26b47, #d946ef, #ea580c);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -140,13 +135,13 @@
 
 .hero-subtitle {
   font-size: 1.125rem;
-  color: var(--neutral-600);
+  color: #525252;
   line-height: 1.6;
   margin-bottom: 2rem;
 }
 
 .dark .hero-subtitle {
-  color: var(--neutral-400);
+  color: #a3a3a3;
 }
 
 .hero-search {
@@ -180,23 +175,23 @@
   flex: 1;
   height: 3.5rem;
   padding: 0 1rem;
-  border: 1px solid var(--neutral-300);
+  border: 1px solid #d4d4d4;
   border-radius: 0.5rem;
   font-size: 1rem;
   background: white;
-  color: var(--neutral-900);
+  color: #171717;
 }
 
 .dark .search-input {
-  background: var(--neutral-800);
-  border-color: var(--neutral-600);
-  color: var(--neutral-100);
+  background: #262626;
+  border-color: #525252;
+  color: #fafafa;
 }
 
 .search-button {
   height: 3.5rem;
   padding: 0 2rem;
-  background: linear-gradient(to right, var(--primary-500), var(--accent-500));
+  background: linear-gradient(to right, #f26b47, #d946ef);
   color: white;
   border: none;
   border-radius: 0.5rem;
