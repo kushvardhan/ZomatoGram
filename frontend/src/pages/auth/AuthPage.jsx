@@ -1,6 +1,5 @@
-import { motion } from "framer-motion";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AnimatePresence,  useAnimation } from "framer-motion";
+import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import {
   ArrowLeft,
   ArrowRight,
@@ -17,14 +16,20 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { z } from "zod";
 import { ZomatoGramLogo1, ZomatoGramLogo2 } from "../../assets/logos";
-import { useAuth } from "../../contexts/AuthContext";
 import Button from "../../components/ui/Button";
 import { Select } from "../../components/ui/Dropdown";
 import Input from "../../components/ui/Input";
 import { useToast } from "../../components/ui/Toast";
+import { useAuth } from "../../contexts/AuthContext";
+import "./AuthPage.css";
 
 // Validation schemas
 const userSignInSchema = z.object({
