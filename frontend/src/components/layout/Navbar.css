@@ -1,0 +1,339 @@
+/* Navbar Styles */
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--neutral-200);
+  transition: all 0.3s ease;
+}
+
+.dark .navbar {
+  background: rgba(38, 38, 38, 0.95);
+  border-bottom-color: var(--neutral-800);
+}
+
+.navbar-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.navbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 4rem;
+}
+
+/* Logo */
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--neutral-900);
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.dark .navbar-logo {
+  color: var(--neutral-100);
+}
+
+.navbar-logo-icon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--primary-600);
+}
+
+/* Navigation */
+.navbar-nav {
+  display: none;
+  align-items: center;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .navbar-nav {
+    display: flex;
+  }
+}
+
+.navbar-nav-link {
+  text-decoration: none;
+  color: var(--neutral-600);
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.dark .navbar-nav-link {
+  color: var(--neutral-400);
+}
+
+.navbar-nav-link:hover {
+  color: var(--primary-600);
+  background: var(--primary-50);
+}
+
+.dark .navbar-nav-link:hover {
+  color: var(--primary-400);
+  background: var(--primary-900);
+}
+
+.navbar-nav-link.active {
+  color: var(--primary-600);
+  background: var(--primary-50);
+}
+
+.dark .navbar-nav-link.active {
+  color: var(--primary-400);
+  background: var(--primary-900);
+}
+
+/* Search */
+.navbar-search {
+  display: none;
+  position: relative;
+  flex: 1;
+  max-width: 24rem;
+  margin: 0 2rem;
+}
+
+@media (min-width: 1024px) {
+  .navbar-search {
+    display: block;
+  }
+}
+
+.navbar-search-input {
+  width: 100%;
+  height: 2.5rem;
+  padding: 0 1rem 0 2.5rem;
+  border: 1px solid var(--neutral-300);
+  border-radius: 0.5rem;
+  background: white;
+  color: var(--neutral-900);
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+
+.dark .navbar-search-input {
+  background: var(--neutral-800);
+  border-color: var(--neutral-600);
+  color: var(--neutral-100);
+}
+
+.navbar-search-input:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgba(var(--primary-500-rgb), 0.1);
+}
+
+.navbar-search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1rem;
+  height: 1rem;
+  color: var(--neutral-400);
+}
+
+/* Actions */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar-action-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--neutral-600);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dark .navbar-action-button {
+  color: var(--neutral-400);
+}
+
+.navbar-action-button:hover {
+  background: var(--neutral-100);
+  color: var(--neutral-900);
+}
+
+.dark .navbar-action-button:hover {
+  background: var(--neutral-800);
+  color: var(--neutral-100);
+}
+
+.navbar-action-button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Cart Badge */
+.cart-badge {
+  position: absolute;
+  top: -0.25rem;
+  right: -0.25rem;
+  background: var(--primary-500);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 0.625rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.25rem;
+}
+
+/* Mobile Menu */
+.mobile-menu-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: var(--neutral-600);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .mobile-menu-button {
+    display: none;
+  }
+}
+
+.dark .mobile-menu-button {
+  color: var(--neutral-400);
+}
+
+.mobile-menu-button:hover {
+  background: var(--neutral-100);
+  color: var(--neutral-900);
+}
+
+.dark .mobile-menu-button:hover {
+  background: var(--neutral-800);
+  color: var(--neutral-100);
+}
+
+.mobile-menu-button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu {
+  display: block;
+  border-top: 1px solid var(--neutral-200);
+  background: white;
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .mobile-menu {
+    display: none;
+  }
+}
+
+.dark .mobile-menu {
+  background: var(--neutral-900);
+  border-top-color: var(--neutral-800);
+}
+
+.mobile-menu-search {
+  margin-bottom: 1rem;
+}
+
+.mobile-menu-search-input {
+  width: 100%;
+  height: 2.5rem;
+  padding: 0 1rem 0 2.5rem;
+  border: 1px solid var(--neutral-300);
+  border-radius: 0.5rem;
+  background: white;
+  color: var(--neutral-900);
+  font-size: 0.875rem;
+}
+
+.dark .mobile-menu-search-input {
+  background: var(--neutral-800);
+  border-color: var(--neutral-600);
+  color: var(--neutral-100);
+}
+
+.mobile-menu-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.mobile-menu-nav-link {
+  text-decoration: none;
+  color: var(--neutral-600);
+  font-weight: 500;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.dark .mobile-menu-nav-link {
+  color: var(--neutral-400);
+}
+
+.mobile-menu-nav-link:hover {
+  color: var(--primary-600);
+  background: var(--primary-50);
+}
+
+.dark .mobile-menu-nav-link:hover {
+  color: var(--primary-400);
+  background: var(--primary-900);
+}
+
+.mobile-menu-nav-link.active {
+  color: var(--primary-600);
+  background: var(--primary-50);
+}
+
+.dark .mobile-menu-nav-link.active {
+  color: var(--primary-400);
+  background: var(--primary-900);
+}
+
+.mobile-menu-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid var(--neutral-200);
+}
+
+.dark .mobile-menu-actions {
+  border-top-color: var(--neutral-800);
+}
+
+/* Dropdown styles are handled by the Dropdown component */

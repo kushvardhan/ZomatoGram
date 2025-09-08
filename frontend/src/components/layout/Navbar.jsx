@@ -1,7 +1,5 @@
-import { motion } from "framer-motion";
 import {
   Bell,
-  MapPin,
   Menu,
   Moon,
   Search,
@@ -13,17 +11,19 @@ import {
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ZomatoGramLogo } from "../../assets/logos";
+import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../hooks/useTheme";
 import { cn } from "../../utils/cn";
 import Button from "../ui/Button";
 import Dropdown, { DropdownDivider, DropdownItem } from "../ui/Dropdown";
-import Input from "../ui/Input";
+import "./Navbar.css";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
+  const { isAuthenticated, user, userType, logout } = useAuth();
 
   const navigation = [
     { name: "Home", href: "/", current: location.pathname === "/" },
@@ -44,12 +44,12 @@ const Navbar = () => {
     },
   ];
 
-  const userMenuItems = [
-    { label: "Profile", href: "/profile" },
-    { label: "Orders", href: "/orders" },
-    { label: "Addresses", href: "/addresses" },
-    { label: "Settings", href: "/settings" },
-  ];
+  // const userMenuItems = [
+  //   { label: "Profile", href: "/profile" },
+  //   { label: "Orders", href: "/orders" },
+  //   { label: "Addresses", href: "/addresses" },
+  //   { label: "Settings", href: "/settings" },
+  // ];
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -60,29 +60,22 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-sticky bg-white/95 dark:bg-neutral-900/95 backdrop-blur-sm border-b border-neutral-200 dark:border-neutral-800">
-      <div className="container">
-        <div className="flex items-center justify-between h-16">
+    <nav className="navbar">
+      <div className="navbar-container">
+        <div className="navbar-content">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <ZomatoGramLogo className="w-8 h-8 text-primary-600" />
-            <span className="text-xl font-bold text-neutral-900 dark:text-neutral-100">
-              ZomatoGram
-            </span>
+          <Link to="/" className="navbar-logo">
+            <ZomatoGramLogo className="navbar-logo-icon" />
+            <span>ZomatoGram</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="navbar-nav">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className={cn(
-                  "text-sm font-medium transition-colors hover:text-primary-600",
-                  item.current
-                    ? "text-primary-600"
-                    : "text-neutral-700 dark:text-neutral-300"
-                )}
+                className={cn("navbar-nav-link", item.current && "active")}
               >
                 {item.name}
               </Link>
@@ -90,54 +83,40 @@ const Navbar = () => {
           </div>
 
           {/* Search Bar */}
-          <div className="hidden lg:block flex-1 max-w-md mx-8">
+          <div className="navbar-search">
             <form onSubmit={handleSearch}>
-              <Input
+              <Search className="navbar-search-icon" />
+              <input
                 type="search"
                 placeholder="Search for restaurants, cuisines..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                leftIcon={<Search className="w-4 h-4" />}
-                className="w-full"
+                className="navbar-search-input"
               />
             </form>
           </div>
 
           {/* Right Side Actions */}
-          <div className="flex items-center space-x-4">
-            {/* Location */}
-            <Button variant="ghost" size="sm" className="hidden md:flex">
-              <MapPin className="w-4 h-4 mr-2" />
-              <span className="text-sm">Location</span>
-            </Button>
-
+          <div className="navbar-actions">
             {/* Theme Toggle */}
-            <Button
-              variant="ghost"
-              size="sm"
+            <button
+              className="navbar-action-button"
               onClick={toggleTheme}
               aria-label="Toggle theme"
             >
-              {theme === "dark" ? (
-                <Sun className="w-4 h-4" />
-              ) : (
-                <Moon className="w-4 h-4" />
-              )}
-            </Button>
+              {theme === "dark" ? <Sun /> : <Moon />}
+            </button>
 
             {/* Notifications */}
-            <Button variant="ghost" size="sm" className="relative">
-              <Bell className="w-4 h-4" />
-              <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-            </Button>
+            <button className="navbar-action-button">
+              <Bell />
+            </button>
 
             {/* Cart */}
-            <Button variant="ghost" size="sm" className="relative">
-              <ShoppingCart className="w-4 h-4" />
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary-600 text-white text-xs rounded-full flex items-center justify-center">
-                3
-              </span>
-            </Button>
+            <button className="navbar-action-button">
+              <ShoppingCart />
+              <span className="cart-badge">3</span>
+            </button>
 
             {/* User Menu */}
             <Dropdown
@@ -148,97 +127,122 @@ const Navbar = () => {
               }
               align="right"
             >
-              <div className="px-4 py-2 border-b border-neutral-200 dark:border-neutral-700">
-                <p className="text-sm font-medium">Guest User</p>
-                <p className="text-xs text-neutral-500">Not signed in</p>
-              </div>
-              <Link to="/signin-user">
-                <DropdownItem>Sign In</DropdownItem>
-              </Link>
-              <Link to="/signup-user">
-                <DropdownItem>Sign Up</DropdownItem>
-              </Link>
-              <DropdownDivider />
-              <Link to="/signin-partner">
-                <DropdownItem>Partner Login</DropdownItem>
-              </Link>
+              {isAuthenticated ? (
+                <>
+                  <div className="px-4 py-2 border-b border-neutral-200 dark:border-neutral-700">
+                    <p className="text-sm font-medium">
+                      {user?.name || "User"}
+                    </p>
+                    <p className="text-xs text-neutral-500">{user?.email}</p>
+                    <p className="text-xs text-primary-500 capitalize">
+                      {userType} Account
+                    </p>
+                  </div>
+                  {userType === "user" && (
+                    <>
+                      <Link to="/profile">
+                        <DropdownItem>Profile</DropdownItem>
+                      </Link>
+                      <Link to="/orders">
+                        <DropdownItem>My Orders</DropdownItem>
+                      </Link>
+                      <Link to="/restaurants">
+                        <DropdownItem>Browse Restaurants</DropdownItem>
+                      </Link>
+                    </>
+                  )}
+                  {userType === "partner" && (
+                    <>
+                      <Link to="/partner">
+                        <DropdownItem>Dashboard</DropdownItem>
+                      </Link>
+                      <Link to="/partner/orders">
+                        <DropdownItem>Manage Orders</DropdownItem>
+                      </Link>
+                      <Link to="/partner/menu">
+                        <DropdownItem>Manage Menu</DropdownItem>
+                      </Link>
+                    </>
+                  )}
+                  <DropdownDivider />
+                  <DropdownItem onClick={logout}>Sign Out</DropdownItem>
+                </>
+              ) : (
+                <>
+                  <div className="px-4 py-2 border-b border-neutral-200 dark:border-neutral-700">
+                    <p className="text-sm font-medium">Guest User</p>
+                    <p className="text-xs text-neutral-500">Not signed in</p>
+                  </div>
+                  <Link to="/auth?mode=signin&type=user">
+                    <DropdownItem>Sign In</DropdownItem>
+                  </Link>
+                  <Link to="/auth?mode=signup&type=user">
+                    <DropdownItem>Sign Up</DropdownItem>
+                  </Link>
+                  <DropdownDivider />
+                  <Link to="/auth?mode=signin&type=partner">
+                    <DropdownItem>Partner Login</DropdownItem>
+                  </Link>
+                </>
+              )}
             </Dropdown>
 
             {/* Mobile Menu Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="md:hidden"
+            <button
+              className="mobile-menu-button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label="Toggle mobile menu"
             >
-              {isMobileMenuOpen ? (
-                <X className="w-4 h-4" />
-              ) : (
-                <Menu className="w-4 h-4" />
-              )}
-            </Button>
+              {isMobileMenuOpen ? <X /> : <Menu />}
+            </button>
           </div>
-        </div>
-
-        {/* Mobile Search */}
-        <div className="lg:hidden pb-4">
-          <form onSubmit={handleSearch}>
-            <Input
-              type="search"
-              placeholder="Search for restaurants, cuisines..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              leftIcon={<Search className="w-4 h-4" />}
-              className="w-full"
-            />
-          </form>
         </div>
       </div>
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <motion.div
-          className="md:hidden border-t border-neutral-200 dark:border-neutral-800"
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <div className="container py-4 space-y-2">
+        <div className="mobile-menu">
+          <div className="mobile-menu-search">
+            <Search className="navbar-search-icon" />
+            <input
+              type="search"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="mobile-menu-search-input"
+            />
+          </div>
+
+          <div className="mobile-menu-nav">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 to={item.href}
-                className={cn(
-                  "block px-3 py-2 rounded-md text-base font-medium transition-colors",
-                  item.current
-                    ? "bg-primary-50 dark:bg-primary-900/20 text-primary-600"
-                    : "text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
-                )}
+                className={cn("mobile-menu-nav-link", item.current && "active")}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {item.name}
               </Link>
             ))}
-            <div className="pt-2 border-t border-neutral-200 dark:border-neutral-800">
-              <Link
-                to="/profile"
-                className="block px-3 py-2 rounded-md text-base font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Profile
-              </Link>
-              <Link
-                to="/orders"
-                className="block px-3 py-2 rounded-md text-base font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Orders
-              </Link>
-            </div>
           </div>
-        </motion.div>
+
+          <div className="mobile-menu-actions">
+            <button
+              className="navbar-action-button"
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+            >
+              {theme === "dark" ? <Sun /> : <Moon />}
+            </button>
+            <button className="navbar-action-button">
+              <Bell />
+            </button>
+            <button className="navbar-action-button">
+              <ShoppingCart />
+              <span className="cart-badge">3</span>
+            </button>
+          </div>
+        </div>
       )}
     </nav>
   );
