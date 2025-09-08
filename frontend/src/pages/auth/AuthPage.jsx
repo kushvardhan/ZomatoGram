@@ -1,88 +1,99 @@
-import React, { useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { 
-  Eye, 
-  EyeOff, 
-  Mail, 
-  Lock, 
-  User, 
-  Phone, 
-  Store, 
-  MapPin,
-  ArrowRight, 
+import { motion } from "framer-motion";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AnimatePresence,  useAnimation } from "framer-motion";
+import {
   ArrowLeft,
+  ArrowRight,
+  Eye,
+  EyeOff,
+  Lock,
+  Mail,
+  MapPin,
+  Phone,
+  ShoppingBag,
+  Store,
+  User,
   Utensils,
-  ShoppingBag
-} from 'lucide-react';
-import { ZomatoGramLogo1, ZomatoGramLogo2 } from '../../assets/logos';
-import Button from '../../components/ui/Button';
-import Input from '../../components/ui/Input';
-import { Select } from '../../components/ui/Dropdown';
-import { useToast } from '../../components/ui/Toast';
+} from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { z } from "zod";
+import { ZomatoGramLogo1, ZomatoGramLogo2 } from "../../assets/logos";
+import { useAuth } from "../../contexts/AuthContext";
+import Button from "../../components/ui/Button";
+import { Select } from "../../components/ui/Dropdown";
+import Input from "../../components/ui/Input";
+import { useToast } from "../../components/ui/Toast";
 
 // Validation schemas
 const userSignInSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-const userSignUpSchema = z.object({
-  fullName: z.string().min(2, 'Full name must be at least 2 characters'),
-  email: z.string().email('Please enter a valid email address'),
-  phone: z.string().min(10, 'Please enter a valid phone number'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+const userSignUpSchema = z
+  .object({
+    fullName: z.string().min(2, "Full name must be at least 2 characters"),
+    email: z.string().email("Please enter a valid email address"),
+    phone: z.string().min(10, "Please enter a valid phone number"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
-const partnerSignUpSchema = z.object({
-  fullName: z.string().min(2, 'Full name must be at least 2 characters'),
-  email: z.string().email('Please enter a valid email address'),
-  phone: z.string().min(10, 'Please enter a valid phone number'),
-  restaurantName: z.string().min(2, 'Restaurant name must be at least 2 characters'),
-  address: z.string().min(10, 'Please enter a complete address'),
-  cuisineType: z.string().min(1, 'Please select a cuisine type'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+const partnerSignUpSchema = z
+  .object({
+    fullName: z.string().min(2, "Full name must be at least 2 characters"),
+    email: z.string().email("Please enter a valid email address"),
+    phone: z.string().min(10, "Please enter a valid phone number"),
+    restaurantName: z
+      .string()
+      .min(2, "Restaurant name must be at least 2 characters"),
+    address: z.string().min(10, "Please enter a complete address"),
+    cuisineType: z.string().min(1, "Please select a cuisine type"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 const cuisineOptions = [
-  { value: 'indian', label: 'Indian' },
-  { value: 'chinese', label: 'Chinese' },
-  { value: 'italian', label: 'Italian' },
-  { value: 'mexican', label: 'Mexican' },
-  { value: 'thai', label: 'Thai' },
-  { value: 'american', label: 'American' },
-  { value: 'mediterranean', label: 'Mediterranean' },
-  { value: 'japanese', label: 'Japanese' },
+  { value: "indian", label: "Indian" },
+  { value: "chinese", label: "Chinese" },
+  { value: "italian", label: "Italian" },
+  { value: "mexican", label: "Mexican" },
+  { value: "thai", label: "Thai" },
+  { value: "american", label: "American" },
+  { value: "mediterranean", label: "Mediterranean" },
+  { value: "japanese", label: "Japanese" },
 ];
 
 const AuthPage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
-  
+  const { login, register: registerUser } = useAuth();
+
   // Get mode from URL params (signin/signup) and type (user/partner)
-  const mode = searchParams.get('mode') || 'signin'; // signin or signup
-  const type = searchParams.get('type') || 'user'; // user or partner
-  
+  const mode = searchParams.get("mode") || "signin"; // signin or signup
+  const type = searchParams.get("type") || "user"; // user or partner
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const controls = useAnimation();
 
   // Determine which schema to use
   const getSchema = () => {
-    if (mode === 'signin') return userSignInSchema;
-    if (type === 'user') return userSignUpSchema;
+    if (mode === "signin") return userSignInSchema;
+    if (type === "user") return userSignUpSchema;
     return partnerSignUpSchema;
   };
 
@@ -97,55 +108,87 @@ const AuthPage = () => {
 
   const onSubmit = async (data) => {
     setIsLoading(true);
+    controls.start({ opacity: 0, y: 20 });
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      if (mode === 'signin') {
-        toast.success(`Welcome back! ${type === 'partner' ? 'Redirecting to dashboard...' : 'You have been signed in successfully.'}`);
-        navigate(type === 'partner' ? '/partner' : '/');
+      let result;
+
+      if (mode === "signin") {
+        result = await login(data, type);
       } else {
-        toast.success(`Account created successfully! ${type === 'partner' ? 'We will review your application.' : 'Welcome to ZomatoGram.'}`);
-        navigate(type === 'partner' ? '/signin-partner' : '/');
+        result = await registerUser(data, type);
+      }
+
+      if (result.success) {
+        const from =
+          location.state?.from?.pathname ||
+          (type === "partner" ? "/partner" : "/restaurants");
+
+        if (mode === "signin") {
+          toast.success(
+            `Welcome back! ${
+              type === "partner"
+                ? "Redirecting to dashboard..."
+                : "You have been signed in successfully."
+            }`
+          );
+        } else {
+          toast.success(
+            `Account created successfully! ${
+              type === "partner"
+                ? "Welcome to your dashboard."
+                : "Welcome to ZomatoGram."
+            }`
+          );
+        }
+
+        navigate(from, { replace: true });
+      } else {
+        toast.error(result.error || "Something went wrong. Please try again.");
       }
     } catch (error) {
-      toast.error('Something went wrong. Please try again.');
+      console.log(error);
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
+      controls.start({ opacity: 1, y: 0 });
     }
   };
 
   const switchMode = (newMode) => {
     const params = new URLSearchParams(searchParams);
-    params.set('mode', newMode);
+    params.set("mode", newMode);
     navigate(`/auth?${params.toString()}`);
     reset();
   };
 
   const switchType = (newType) => {
     const params = new URLSearchParams(searchParams);
-    params.set('type', newType);
+    params.set("type", newType);
     navigate(`/auth?${params.toString()}`);
     reset();
   };
 
   const getTitle = () => {
-    if (mode === 'signin') {
-      return type === 'partner' ? 'Partner Sign In' : 'Welcome Back';
+    if (mode === "signin") {
+      return type === "partner" ? "Partner Sign In" : "Welcome Back";
     }
-    return type === 'partner' ? 'Become a Partner' : 'Join ZomatoGram';
+    return type === "partner" ? "Become a Partner" : "Join ZomatoGram";
   };
 
   const getSubtitle = () => {
-    if (mode === 'signin') {
-      return type === 'partner' ? 'Access your restaurant dashboard' : 'Sign in to your account';
+    if (mode === "signin") {
+      return type === "partner"
+        ? "Access your restaurant dashboard"
+        : "Sign in to your account";
     }
-    return type === 'partner' ? 'Start your restaurant journey' : 'Create your account today';
+    return type === "partner"
+      ? "Start your restaurant journey"
+      : "Create your account today";
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-pink-50 dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900 flex items-center justify-center p-4">
       <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-        
         {/* Left Side - Branding */}
         <motion.div
           className="hidden lg:block space-y-8"
@@ -155,59 +198,84 @@ const AuthPage = () => {
         >
           <div className="space-y-6">
             <div className="flex items-center space-x-3">
-              {type === 'partner' ? (
-                <ZomatoGramLogo2 className="w-12 h-12 text-primary-500" animate={true} />
+              {type === "partner" ? (
+                <ZomatoGramLogo2
+                  className="w-12 h-12 text-primary-500"
+                  animate={true}
+                />
               ) : (
-                <ZomatoGramLogo1 className="w-12 h-12 text-primary-500" animate={true} />
+                <ZomatoGramLogo1
+                  className="w-12 h-12 text-primary-500"
+                  animate={true}
+                />
               )}
               <div>
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent">
                   ZomatoGram
                 </h1>
-                {type === 'partner' && (
-                  <p className="text-sm text-primary-500 font-medium">Partner Portal</p>
+                {type === "partner" && (
+                  <p className="text-sm text-primary-500 font-medium">
+                    Partner Portal
+                  </p>
                 )}
               </div>
             </div>
-            
+
             <div className="space-y-4">
               <h2 className="text-4xl font-bold text-neutral-900 dark:text-neutral-100 leading-tight">
-                {mode === 'signin' ? (
-                  type === 'partner' ? (
-                    <>Manage your restaurant with <span className="bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent">ease</span></>
+                {mode === "signin" ? (
+                  type === "partner" ? (
+                    <>
+                      Manage your restaurant with{" "}
+                      <span className="bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent">
+                        ease
+                      </span>
+                    </>
                   ) : (
-                    <>Welcome back to your <span className="bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent">food journey</span></>
+                    <>
+                      Welcome back to your{" "}
+                      <span className="bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent">
+                        food journey
+                      </span>
+                    </>
                   )
+                ) : type === "partner" ? (
+                  <>
+                    Grow your business with{" "}
+                    <span className="bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent">
+                      ZomatoGram
+                    </span>
+                  </>
                 ) : (
-                  type === 'partner' ? (
-                    <>Grow your business with <span className="bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent">ZomatoGram</span></>
-                  ) : (
-                    <>Start your culinary <span className="bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent">adventure</span></>
-                  )
+                  <>
+                    Start your culinary{" "}
+                    <span className="bg-gradient-to-r from-primary-500 to-accent-500 bg-clip-text text-transparent">
+                      adventure
+                    </span>
+                  </>
                 )}
               </h2>
               <p className="text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">
-                {type === 'partner' 
-                  ? 'Join thousands of restaurants and reach more customers with our platform.'
-                  : 'Discover amazing restaurants, order your favorite meals, and enjoy fast delivery.'
-                }
+                {type === "partner"
+                  ? "Join thousands of restaurants and reach more customers with our platform."
+                  : "Discover amazing restaurants, order your favorite meals, and enjoy fast delivery."}
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-4 pt-8">
               <div className="text-center p-4 bg-white/50 dark:bg-neutral-800/50 rounded-xl backdrop-blur-sm border border-white/20">
                 <div className="w-12 h-12 bg-gradient-to-r from-primary-500 to-accent-500 rounded-full flex items-center justify-center mx-auto mb-2">
-                  {type === 'partner' ? (
+                  {type === "partner" ? (
                     <Store className="w-6 h-6 text-white" />
                   ) : (
                     <Utensils className="w-6 h-6 text-white" />
                   )}
                 </div>
                 <div className="text-2xl font-bold text-primary-500">
-                  {type === 'partner' ? '10K+' : '50K+'}
+                  {type === "partner" ? "10K+" : "50K+"}
                 </div>
                 <div className="text-sm text-neutral-600 dark:text-neutral-400">
-                  {type === 'partner' ? 'Partners' : 'Happy Users'}
+                  {type === "partner" ? "Partners" : "Happy Users"}
                 </div>
               </div>
               <div className="text-center p-4 bg-white/50 dark:bg-neutral-800/50 rounded-xl backdrop-blur-sm border border-white/20">
@@ -215,7 +283,9 @@ const AuthPage = () => {
                   <ShoppingBag className="w-6 h-6 text-white" />
                 </div>
                 <div className="text-2xl font-bold text-accent-500">1M+</div>
-                <div className="text-sm text-neutral-600 dark:text-neutral-400">Orders</div>
+                <div className="text-sm text-neutral-600 dark:text-neutral-400">
+                  Orders
+                </div>
               </div>
             </div>
           </div>
@@ -229,35 +299,40 @@ const AuthPage = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           <div className="bg-white/80 dark:bg-neutral-800/80 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20 dark:border-neutral-700/50">
-            
             {/* Mobile Logo */}
             <div className="lg:hidden flex items-center justify-center mb-8">
-              {type === 'partner' ? (
-                <ZomatoGramLogo2 className="w-12 h-12 text-primary-500" animate={true} />
+              {type === "partner" ? (
+                <ZomatoGramLogo2
+                  className="w-12 h-12 text-primary-500"
+                  animate={true}
+                />
               ) : (
-                <ZomatoGramLogo1 className="w-12 h-12 text-primary-500" animate={true} />
+                <ZomatoGramLogo1
+                  className="w-12 h-12 text-primary-500"
+                  animate={true}
+                />
               )}
             </div>
 
             {/* Type Switcher */}
             <div className="flex bg-neutral-100 dark:bg-neutral-700 rounded-lg p-1 mb-6">
               <button
-                onClick={() => switchType('user')}
+                onClick={() => switchType("user")}
                 className={`flex-1 flex items-center justify-center space-x-2 py-2 px-4 rounded-md text-sm font-medium transition-all ${
-                  type === 'user'
-                    ? 'bg-white dark:bg-neutral-600 text-primary-600 shadow-sm'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200'
+                  type === "user"
+                    ? "bg-white dark:bg-neutral-600 text-primary-600 shadow-sm"
+                    : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
                 }`}
               >
                 <User className="w-4 h-4" />
                 <span>Customer</span>
               </button>
               <button
-                onClick={() => switchType('partner')}
+                onClick={() => switchType("partner")}
                 className={`flex-1 flex items-center justify-center space-x-2 py-2 px-4 rounded-md text-sm font-medium transition-all ${
-                  type === 'partner'
-                    ? 'bg-white dark:bg-neutral-600 text-primary-600 shadow-sm'
-                    : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200'
+                  type === "partner"
+                    ? "bg-white dark:bg-neutral-600 text-primary-600 shadow-sm"
+                    : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
                 }`}
               >
                 <Store className="w-4 h-4" />
@@ -277,16 +352,16 @@ const AuthPage = () => {
 
               <AnimatePresence mode="wait">
                 <motion.form
+                  animate={controls}
                   key={`${mode}-${type}`}
                   onSubmit={handleSubmit(onSubmit)}
                   className="space-y-4"
                   initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.3 }}
                 >
                   {/* Sign Up Fields */}
-                  {mode === 'signup' && (
+                  {mode === "signup" && (
                     <>
                       <Input
                         label="Full Name"
@@ -294,17 +369,17 @@ const AuthPage = () => {
                         placeholder="Enter your full name"
                         leftIcon={<User className="w-4 h-4" />}
                         error={errors.fullName?.message}
-                        {...register('fullName')}
+                        {...register("fullName")}
                       />
 
-                      {type === 'partner' && (
+                      {type === "partner" && (
                         <Input
                           label="Restaurant Name"
                           type="text"
                           placeholder="Enter your restaurant name"
                           leftIcon={<Store className="w-4 h-4" />}
                           error={errors.restaurantName?.message}
-                          {...register('restaurantName')}
+                          {...register("restaurantName")}
                         />
                       )}
 
@@ -314,10 +389,10 @@ const AuthPage = () => {
                         placeholder="Enter your phone number"
                         leftIcon={<Phone className="w-4 h-4" />}
                         error={errors.phone?.message}
-                        {...register('phone')}
+                        {...register("phone")}
                       />
 
-                      {type === 'partner' && (
+                      {type === "partner" && (
                         <>
                           <Input
                             label="Restaurant Address"
@@ -325,7 +400,7 @@ const AuthPage = () => {
                             placeholder="Enter complete address"
                             leftIcon={<MapPin className="w-4 h-4" />}
                             error={errors.address?.message}
-                            {...register('address')}
+                            {...register("address")}
                           />
 
                           <div>
@@ -336,7 +411,7 @@ const AuthPage = () => {
                               options={cuisineOptions}
                               placeholder="Select cuisine type"
                               error={errors.cuisineType?.message}
-                              {...register('cuisineType')}
+                              {...register("cuisineType")}
                             />
                           </div>
                         </>
@@ -348,16 +423,22 @@ const AuthPage = () => {
                   <Input
                     label="Email"
                     type="email"
-                    placeholder={`Enter your ${type === 'partner' ? 'business ' : ''}email`}
+                    placeholder={`Enter your ${
+                      type === "partner" ? "business " : ""
+                    }email`}
                     leftIcon={<Mail className="w-4 h-4" />}
                     error={errors.email?.message}
-                    {...register('email')}
+                    {...register("email")}
                   />
 
                   <Input
                     label="Password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder={mode === 'signin' ? 'Enter your password' : 'Create a password'}
+                    type={showPassword ? "text" : "password"}
+                    placeholder={
+                      mode === "signin"
+                        ? "Enter your password"
+                        : "Create a password"
+                    }
                     leftIcon={<Lock className="w-4 h-4" />}
                     rightIcon={
                       <button
@@ -365,34 +446,44 @@ const AuthPage = () => {
                         onClick={() => setShowPassword(!showPassword)}
                         className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
                       >
-                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        {showPassword ? (
+                          <EyeOff className="w-4 h-4" />
+                        ) : (
+                          <Eye className="w-4 h-4" />
+                        )}
                       </button>
                     }
                     error={errors.password?.message}
-                    {...register('password')}
+                    {...register("password")}
                   />
 
-                  {mode === 'signup' && (
+                  {mode === "signup" && (
                     <Input
                       label="Confirm Password"
-                      type={showConfirmPassword ? 'text' : 'password'}
+                      type={showConfirmPassword ? "text" : "password"}
                       placeholder="Confirm your password"
                       leftIcon={<Lock className="w-4 h-4" />}
                       rightIcon={
                         <button
                           type="button"
-                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          onClick={() =>
+                            setShowConfirmPassword(!showConfirmPassword)
+                          }
                           className="text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300"
                         >
-                          {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          {showConfirmPassword ? (
+                            <EyeOff className="w-4 h-4" />
+                          ) : (
+                            <Eye className="w-4 h-4" />
+                          )}
                         </button>
                       }
                       error={errors.confirmPassword?.message}
-                      {...register('confirmPassword')}
+                      {...register("confirmPassword")}
                     />
                   )}
 
-                  {mode === 'signin' && (
+                  {mode === "signin" && (
                     <div className="flex items-center justify-between">
                       <label className="flex items-center">
                         <input
@@ -412,7 +503,7 @@ const AuthPage = () => {
                     </div>
                   )}
 
-                  {mode === 'signup' && (
+                  {mode === "signup" && (
                     <div className="flex items-start">
                       <input
                         type="checkbox"
@@ -420,12 +511,18 @@ const AuthPage = () => {
                         required
                       />
                       <span className="ml-2 text-sm text-neutral-600 dark:text-neutral-400">
-                        I agree to the{' '}
-                        <Link to="/terms" className="text-primary-500 hover:text-primary-600 font-medium">
+                        I agree to the{" "}
+                        <Link
+                          to="/terms"
+                          className="text-primary-500 hover:text-primary-600 font-medium"
+                        >
                           Terms of Service
-                        </Link>{' '}
-                        and{' '}
-                        <Link to="/privacy" className="text-primary-500 hover:text-primary-600 font-medium">
+                        </Link>{" "}
+                        and{" "}
+                        <Link
+                          to="/privacy"
+                          className="text-primary-500 hover:text-primary-600 font-medium"
+                        >
                           Privacy Policy
                         </Link>
                       </span>
@@ -438,22 +535,29 @@ const AuthPage = () => {
                     loading={isLoading}
                     rightIcon={<ArrowRight className="w-4 h-4" />}
                   >
-                    {mode === 'signin' 
-                      ? (type === 'partner' ? 'Access Dashboard' : 'Sign In')
-                      : (type === 'partner' ? 'Submit Application' : 'Create Account')
-                    }
+                    {mode === "signin"
+                      ? type === "partner"
+                        ? "Access Dashboard"
+                        : "Sign In"
+                      : type === "partner"
+                      ? "Submit Application"
+                      : "Create Account"}
                   </Button>
                 </motion.form>
               </AnimatePresence>
 
               <div className="text-center">
                 <p className="text-neutral-600 dark:text-neutral-400">
-                  {mode === 'signin' ? "Don't have an account?" : 'Already have an account?'}{' '}
+                  {mode === "signin"
+                    ? "Don't have an account?"
+                    : "Already have an account?"}{" "}
                   <button
-                    onClick={() => switchMode(mode === 'signin' ? 'signup' : 'signin')}
+                    onClick={() =>
+                      switchMode(mode === "signin" ? "signup" : "signin")
+                    }
                     className="text-primary-500 hover:text-primary-600 font-medium"
                   >
-                    {mode === 'signin' ? 'Sign up' : 'Sign in'}
+                    {mode === "signin" ? "Sign up" : "Sign in"}
                   </button>
                 </p>
               </div>
